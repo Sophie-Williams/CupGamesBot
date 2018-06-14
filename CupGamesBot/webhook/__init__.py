@@ -5,4 +5,4 @@ from flask import Flask
 webhook = Flask(__name__)
 
 
-from CupGamesBot.webhook import routes
+from CupGamesBot.webhook import bots, errors, transactions

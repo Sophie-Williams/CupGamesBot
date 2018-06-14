@@ -9,7 +9,22 @@ SSL_dir = os.path.join(base_dir, 'SSL')
 
 
 # TG
-token = os.environ.get('TG_TOKEN')
+token = ''
+
+
+# Transactions
+YANDEX_MONEY_WALLET = '410014848709928'
+YANDEX_MONEY_COEFFICIENT = 1.02
+TRANSACTION_SECRET_KEY = ''
+MIN_IN_SUM = 100
+MAX_IN_SUM = 1000
+MIN_OUT_SUM = 1000
+MAX_OUT_SUM = 1000
+
+
+# Database
+DATABASE_URI = 'sqlite:////Users/dmitry/Projects/CupGamesBot/CupGamesBot/database/main.db?check_same_thread=False' if DEBUG \
+    else 'mysql://CupGamesBot:my_name_is_random_228@localhost/CupGamesBot'
 
 
 # WebHook

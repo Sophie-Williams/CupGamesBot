@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Donation CupGames</title>
+</head>
+<body onload="document.forms['yandex_money'].submit()">
+    <form name="yandex_money" method="POST" action="https://money.yandex.ru/quickpay/confirm.xml">
+        <input type="hidden" name="receiver" value="{{receiver}}">
+        <input type="hidden" name="quickpay-form" value="shop">
+        <input type="hidden" name="short-targets" value="Пополнение счета CupGames.">
+        <input type="hidden" name="sum" value="{{amount}}" data-type="number">
+        <input type="hidden" name="label" value="{{user.id}}">
+        <input type="hidden" name="targets" value="Пополнение счета CupGames. Логин {{user.login}}.">
+        <input type="hidden" name="paymentType" value="AC">
+        <input type="hidden" name="need-fio" value="false">
+        <input type="hidden" name="need-email" value="false">
+        <input type="hidden" name="need-phone" value="false">
+        <input type="hidden" name="need-address" value="false">
+        <input type="hidden" name="formcomment" value="CupGames.">
+        <input type="submit" value="Нажмите сюда, если вы не были автоматически переадресованы.">
+    </form>
+</body>
+</html>
