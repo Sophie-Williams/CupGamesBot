@@ -1,6 +1,6 @@
 # coding: utf-8
 import hashlib
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean
 
 import config
 from CupGamesBot.database import Base, session
@@ -11,27 +11,30 @@ class Transaction(Base):
     __tablename__ = 'transaction'
 
     id = Column(Integer, primary_key=True)
-    notification_type = Column(String)
     amount = Column(Float)
-    currency = Column(String)
+    description = Column(String)
     datetime = Column(DateTime)
-    unaccepted = Column(Boolean)
+    payment_id = Column(Integer)
+    order_id = Column(Integer)
     hash = Column(String)
-    user_id = Column(Integer)
-    codepro = Column(Boolean)
-    sender = Column(String)
-    operation_id = Column(String)
+    accepted = Column(Boolean, default=False)
 
     def verify(self):
-        verification_string = self.notification_type + '&' + self.operation_id + '&' + str(self.amount) + '&' + self.currency + '&'
-        verification_string += self.datetime.strftime("%Y-%m-%dT%H:%M:%SZ") + '&' + self.sender + '&' + str(self.codepro).lower() + '&'
-        verification_string += config.TRANSACTION_SECRET_KEY + '&' + str(self.user_id)
-        verification_string = verification_string.encode('utf-8')
-        return hashlib.sha1(verification_string).hexdigest() == self.hash and not self.codepro and not self.unaccepted
+        verification_string = '{}:{}:{}:{}:{}'.format(
+            config.TRANSACTION_SECRET_KEY,
+            str(self.amount),
+            str(self.payment_id),
+            str(self.order_id),
+            config.TRANSACTION_MERCHANT
+        )
+        return hashlib.md5(verification_string.encode('utf-8')).hexdigest() == self.hash
 
     def apply(self):
-        user = session.query(User).get(self.user_id)
+        if self.accepted:
+            return
+        user = session.query(User).get(self.order_id)
         user.balance += self.amount
+        self.accepted = True
         session.add(self)
         session.add(user)
         session.commit()

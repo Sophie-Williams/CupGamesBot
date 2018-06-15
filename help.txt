@@ -6,9 +6,8 @@ in alembic.ini set sqlalchemy.uri
 in env.py:
     from CupGamesBot import database
     target_metadata = database.Base.metadata
-export PYTHONPATH=/<abs path to dir>/CupGamesBot
-alembic revision --autogenerate -m "some info"
-alembic upgrade head
+PYTHONPATH=/Users/dmitry/Projects/CupGamesBot alembic revision --autogenerate -m "transactions for enpay"
+PYTHONPATH=/Users/dmitry/Projects/CupGamesBot alembic upgrade head
 
 
 chown -R www-data /var/www/CupGamesBot

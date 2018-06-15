@@ -13,13 +13,22 @@ token = ''
 
 
 # Transactions
-YANDEX_MONEY_WALLET = '410014848709928'
-YANDEX_MONEY_COEFFICIENT = 1.02
+TRANSACTION_MERCHANT = '268422351'
 TRANSACTION_SECRET_KEY = ''
+TRANSACTION_PAYMENT_URL = {
+    'RU': 'https://enpay.ru/payment/',
+    'EN': 'https://enpay.ru/payment/en/'
+}
 MIN_IN_SUM = 100
 MAX_IN_SUM = 1000
 MIN_OUT_SUM = 1000
 MAX_OUT_SUM = 1000
+
+
+# Game
+GAME_LOSS_CUPS = 3
+GAME_WIN_CUPS = 2
+GAME_DRAW_CUPS = 1
 
 
 # Database

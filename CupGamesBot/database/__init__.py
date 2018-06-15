@@ -12,4 +12,4 @@ session = Session()
 Base = declarative_base()
 
 
-from CupGamesBot.database import user, transaction
+from CupGamesBot.database import user, transaction, game

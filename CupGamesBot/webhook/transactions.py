@@ -9,25 +9,23 @@ from CupGamesBot.database.transaction import Transaction
 from CupGamesBot.database.user import User
 
 
-@webhook.route('/transaction', methods=['POST'])
+@webhook.route('/transaction/new', methods=['POST'])
 def webhook_for_transactions():
-    transaction = Transaction(operation_id=request.form.get('operation_id', ''),
-                              amount=float(request.form.get('amount', '0')),
-                              datetime=dateutil.parser.parse(request.form.get('datetime', '')),
-                              hash=request.form.get('sha1_hash', ''),
-                              codepro=(request.form.get('codepro', 'false') is 'true'),
-                              notification_type=request.form.get('notification_type', ''),
-                              sender=request.form.get('sender', ''),
-                              currency=request.form.get('currency', ''),
-                              user_id=int(request.form.get('label', '')),
-                              unaccepted=(request.form.get('unaccepted', 'false') is 'true'))
+    transaction = Transaction(
+        amount=float(request.form.get('amount', '0')),
+        description=request.form.get('description'),
+        datetime=dateutil.parser.parse(request.form.get('datetime', '')),
+        payment_id=int(request.form.get('payment_id', 0)),
+        order_id=int(request.form.get('order_id', 0)),
+        hash=request.form.get('sign', '')
+    )
     if not transaction.verify():
         abort(400)
     transaction.apply()
     return ''
 
 
-@webhook.route('/donate')
+@webhook.route('/transaction/donate')
 def webhook_for_donate():
     user_id = request.args.get('id', type=int)
     if user_id is None:
@@ -36,5 +34,5 @@ def webhook_for_donate():
     user = session.query(User).get(user_id)
     if amount > float(config.MAX_IN_SUM) or amount < float(config.MIN_IN_SUM) or user is None:
         abort(400)
-    amount = round(amount*1.02, 2)
-    return render_template('donate.html', user=user, amount=amount, receiver=config.YANDEX_MONEY_WALLET)
+    return render_template('donate.html', user=user, amount=amount, merchant=config.TRANSACTION_MERCHANT,
+                           payment_url=config.TRANSACTION_PAYMENT_URL[str(user.lang)])
